@@ -42,6 +42,7 @@
 #include <linux/mutex.h>
 #include <net/cfg80211.h>
 #include <linux/llist.h>
+#include <linux/version.h>
 
 #include "h2cc2h.h"
 #include "eeprom.h"

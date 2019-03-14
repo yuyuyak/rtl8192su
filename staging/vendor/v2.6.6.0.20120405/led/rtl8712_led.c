@@ -19,6 +19,7 @@
 ******************************************************************************/
 
 #include "drv_types.h"
+#include <linux/version.h>
 
 //================================================================================
 //	Constant.
@@ -74,10 +75,17 @@ void BlinkWorkItemCallback(
 #endif
 
 #ifdef PLATFORM_LINUX
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+static void
+BlinkTimerCallback(
+	struct timer_list *t
+	);
+#else
 static void
 BlinkTimerCallback(
 	unsigned long data
 	);
+#endif
 
 static void
 BlinkWorkItemCallback(
@@ -119,7 +127,11 @@ InitLed871x(
 	pLed->BlinkTimes = 0;
 	pLed->BlinkingLedState = LED_UNKNOWN;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	_init_timer(&(pLed->BlinkTimer), nic, (TIMER_FUNC_TYPE)BlinkTimerCallback, pLed);
+#else    
 	_init_timer(&(pLed->BlinkTimer), nic, BlinkTimerCallback, pLed);
+#endif
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,5,0))
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 #endif
@@ -1411,12 +1423,22 @@ void BlinkWorkItemCallback(
 //		Callback function of LED BlinkTimer, 
 //		it just schedules to corresponding BlinkWorkItem.
 //
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void
+BlinkTimerCallback(
+	struct timer_list *t
+	)
+#else
 void
 BlinkTimerCallback(
 	unsigned long data
 	)
+#endif
 {
+	PLED_871x	 pLed = (TIMER_FUNC_TYPE)BlinkTimerCallback;
+#else    
 	PLED_871x	 pLed = (PLED_871x)data;
+#endif
 
 	//	Added by Albert 2010/04/20
 	//	This will fixed the crash problem on Fedora 12 when trying to do the insmod;ifconfig up;rmmod commands.

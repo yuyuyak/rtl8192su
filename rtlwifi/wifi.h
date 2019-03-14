@@ -37,6 +37,12 @@
 #include <net/mac80211.h>
 #include <linux/completion.h>
 #include "debug.h"
+#include <linux/version.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+#define RX_FLAG_40MHZ RATE_INFO_BW_40
+#define RX_FLAG_HT RX_ENC_HT
+#endif
 
 #define	MASKBYTE0				0xff
 #define	MASKBYTE1				0xff00

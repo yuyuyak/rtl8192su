@@ -1707,9 +1707,15 @@ static void rtl88e_dm_fast_ant_training(struct ieee80211_hw *hw)
 	}
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void rtl88e_dm_fast_antenna_training_callback(struct timer_list *t)
+{
+    struct ieee80211_hw *hw = from_timer(hw, t, my_timer);
+#else
 void rtl88e_dm_fast_antenna_training_callback(unsigned long data)
 {
 	struct ieee80211_hw *hw = (struct ieee80211_hw *)data;
+#endif
 
 	rtl88e_dm_fast_ant_training(hw);
 }

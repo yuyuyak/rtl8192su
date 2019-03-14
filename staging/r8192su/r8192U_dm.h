@@ -240,7 +240,11 @@ extern  void    dm_force_tx_fw_info(struct net_device *dev,u32 force_type, u32 f
 extern  void    dm_init_edca_turbo(struct net_device *dev);
 extern  void    dm_rf_operation_test_callback(unsigned long data);
 extern  void    dm_rf_pathcheck_workitemcallback(struct work_struct *work);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+extern  void dm_fsync_timer_callback(struct timer_list *t);
+#else
 extern  void dm_fsync_timer_callback(unsigned long data);
+#endif
 extern	void	dm_cck_txpower_adjust(struct net_device *dev,bool  binch14);
 extern  void    dm_shadow_init(struct net_device *dev);
 extern void dm_initialize_txpower_tracking(struct net_device *dev);

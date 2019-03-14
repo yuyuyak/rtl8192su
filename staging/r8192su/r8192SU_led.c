@@ -32,8 +32,11 @@
 #define LED_BLINK_WPS_SUCESS_INTERVAL_ALPHA	5000
 
 
-
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+static void BlinkTimerCallback (struct timer_list *t);
+#else
 static void BlinkTimerCallback (unsigned long data);
+#endif
 
 static void BlinkWorkItemCallback (struct work_struct *work);
 
@@ -53,7 +56,7 @@ void InitLed819xUsb (struct net_device *dev, PLED_819xUsb pLed,
 
 	init_timer(&pLed->BlinkTimer);
 	pLed->BlinkTimer.data = (unsigned long)dev;
-	pLed->BlinkTimer.function = BlinkTimerCallback;
+	pLed->BlinkTimer.function = (TIMER_FUNC_TYPE)BlinkTimerCallback;
 
 	INIT_WORK(&priv->BlinkWorkItem, (void*)BlinkWorkItemCallback);
 	priv->pLed = pLed;
@@ -1078,13 +1081,21 @@ SwLedBlink5(
 
 }
 
-
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void
+BlinkTimerCallback(
+	struct timer_list *t
+	)
+{
+    struct net_device 	*dev = from_timer(dev, t, my_timer);
+#else
 void
 BlinkTimerCallback(
 	unsigned long data
 	)
 {
 	struct net_device 	*dev = (struct net_device *)data;
+#endif    
 	struct r8192_priv 	*priv = ieee80211_priv(dev);
 
 	schedule_work(&(priv->BlinkWorkItem));

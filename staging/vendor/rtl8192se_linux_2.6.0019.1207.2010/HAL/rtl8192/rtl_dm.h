@@ -324,7 +324,11 @@ extern  void dm_force_tx_fw_info(struct net_device *dev,
 extern  void    dm_init_edca_turbo(struct net_device *dev);
 extern  void    dm_rf_operation_test_callback(unsigned long data);
 extern  void    dm_rf_pathcheck_workitemcallback(void *data);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+extern  void dm_fsync_timer_callback(struct timer_list *t);
+#else
 extern  void dm_fsync_timer_callback(unsigned long data);
+#endif
 #if 0
 extern  bool    dm_check_lbus_status(struct net_device *dev);
 #endif

@@ -82,7 +82,11 @@ extern	void dm_force_tx_fw_info(struct net_device *dev,
 extern	void	dm_init_edca_turbo(struct net_device *dev);
 extern	void	dm_rf_operation_test_callback(unsigned long data);
 extern	void	dm_rf_pathcheck_workitemcallback(struct work_struct *work);
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+extern	void dm_fsync_timer_callback(struct timer_list *t);
+#else
 extern	void dm_fsync_timer_callback(unsigned long data);
+#endif
 extern	void dm_check_fsync(struct net_device *dev);
 extern	void	dm_shadow_init(struct net_device *dev);
 
@@ -3439,7 +3443,11 @@ static void dm_init_fsync (struct net_device *dev)
 
 	init_timer(&priv->fsync_timer);
 	priv->fsync_timer.data = (unsigned long)dev;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	priv->fsync_timer.function = (TIMER_FUNC_TYPE)dm_fsync_timer_callback;
+#else    
 	priv->fsync_timer.function = dm_fsync_timer_callback;
+#endif    
 }
 
 
@@ -3449,9 +3457,15 @@ static void dm_deInit_fsync(struct net_device *dev)
 	del_timer_sync(&priv->fsync_timer);
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+extern void dm_fsync_timer_callback(struct timer_list *t)
+{
+	struct net_device *dev = (dev, t, my_timer);
+#else    
 extern void dm_fsync_timer_callback(unsigned long data)
 {
 	struct net_device *dev = (struct net_device *)data;
+#endif    
 	struct r8192_priv *priv = ieee80211_priv((struct net_device *)data);
 	u32 rate_index, rate_count = 0, rate_count_diff=0;
 	bool		bSwitchFromCountDiff = false;

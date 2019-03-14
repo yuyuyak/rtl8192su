@@ -42,7 +42,11 @@ void r92su_rx_deinit(struct r92su *r92su);
 u8 *r92su_find_ie(u8 *ies, const u32 len, const u8 ie);
 
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void r92su_reorder_tid_timer(struct timer_list *t)
+#else
 void r92su_reorder_tid_timer(unsigned long arg);
+#endif
 void r92su_rx(struct r92su *r92su, void *skb, const unsigned int len);
 
 #endif /* __R92SU_RX_H__ */

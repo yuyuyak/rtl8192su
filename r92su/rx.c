@@ -1084,7 +1084,11 @@ rx_drop:
 #undef RX_HANDLER
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void r92su_reorder_tid_timer(struct timer_list *t)
+#else
 void r92su_reorder_tid_timer(unsigned long arg)
+#endif
 {
 	struct sk_buff_head frames;
 	struct r92su_rx_tid *tid;
@@ -1118,7 +1122,6 @@ void r92su_reorder_tid_timer(unsigned long arg)
 out:
 	rcu_read_unlock();
 }
-
 static struct sk_buff *rx92su_rx_copy_data(
 	const struct rx_packet *rx, unsigned int rx_len,
 	struct ieee80211_hdr *frame, unsigned int frame_len)

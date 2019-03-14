@@ -53,9 +53,15 @@ void InitLed8190Pci(struct net_device *dev, PLED_8190 	pLed,LED_PIN_8190 LedPin)
 	pLed->BlinkTimes = 0;
 	pLed->BlinkingLedState = LED_OFF;
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	timer_setup(&pLed->BlinkTimer,
+		    BlinkTimerCallback,
+		    0);
+#else
 	setup_timer(&pLed->BlinkTimer,
 		    BlinkTimerCallback,
 		    (unsigned long) pLed);
+#endif            
 }
 
 void DeInitLed8190Pci(PLED_8190 pLed)
@@ -480,9 +486,15 @@ void SwLedBlink7(	PLED_8190 pLed)
 	RT_TRACE(COMP_LED, "Blinktimes (%d): turn on\n", pLed->BlinkTimes);	
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+void BlinkTimerCallback(struct timer_list *t)
+{
+    PLED_8190 	pLed = (PLED_8190, t, my_timer);
+#else
 void BlinkTimerCallback(unsigned long data)
 {	
 	PLED_8190 	pLed = (PLED_8190)data;
+#endif    
 	struct net_device *dev = (struct net_device *)pLed->dev;
 	struct r8192_priv *priv = rtllib_priv(dev);
 		
