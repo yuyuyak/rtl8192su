@@ -4440,7 +4440,7 @@ static void dm_deInit_fsync(struct net_device *dev)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 extern void dm_fsync_timer_callback(struct timer_list *t)
 {
-	struct net_device *dev = from_timer(dev, t, my_timer);
+	struct net_device *dev = from_timer(dev, t, fsync_timer);
 #else
 extern void dm_fsync_timer_callback(unsigned long data)
 {

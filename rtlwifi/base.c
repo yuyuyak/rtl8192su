@@ -1742,7 +1742,7 @@ void rtl_watchdog_wq_callback(void *data)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 void rtl_watch_dog_timer_callback(struct timer_list *t)
 {
-    struct ieee80211_hw *hw = from_timer(hw, t, my_timer);
+    struct ieee80211_hw *hw = from_timer(hw, t, watchdog_timer);
 #else
 void rtl_watch_dog_timer_callback(unsigned long data)
 {
@@ -1855,7 +1855,7 @@ void rtl_c2hcmd_wq_callback(void *data)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 void rtl_easy_concurrent_retrytimer_callback(struct timer_list *t)
 {
-    struct ieee80211_hw *hw = from_timer(hw, t, my_timer);
+    struct ieee80211_hw *hw = from_timer(hw, t, works.dualmac_easyconcurrent_retrytimer);
 #else
 void rtl_easy_concurrent_retrytimer_callback(unsigned long data)
 {

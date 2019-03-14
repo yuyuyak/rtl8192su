@@ -489,7 +489,7 @@ void SwLedBlink7(	PLED_8190 pLed)
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 void BlinkTimerCallback(struct timer_list *t)
 {
-    PLED_8190 	pLed = (PLED_8190, t, my_timer);
+    PLED_8190 	pLed = (PLED_8190, t, BlinkTimer);
 #else
 void BlinkTimerCallback(unsigned long data)
 {	

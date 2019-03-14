@@ -254,13 +254,11 @@ static void _rtl88ee_set_fw_ps_rf_off_low_power(struct ieee80211_hw *hw)
 }
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 void rtl88ee_fw_clk_off_timer_callback(struct timer_list *t)
+{
+    struct ieee80211_hw *hw = from_timer(hw, t, works.fw_clockoff_timer);
 #else
 void rtl88ee_fw_clk_off_timer_callback(unsigned long data)
-#endif
 {
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
-	struct ieee80211_hw *hw = from_timer(hw, t, my_timer);
-#else    
 	struct ieee80211_hw *hw = (struct ieee80211_hw *)data;
 #endif
 

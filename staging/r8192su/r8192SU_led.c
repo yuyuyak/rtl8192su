@@ -1087,7 +1087,7 @@ BlinkTimerCallback(
 	struct timer_list *t
 	)
 {
-    struct net_device 	*dev = from_timer(dev, t, my_timer);
+    struct net_device 	*dev = from_timer(dev, t, BlinkTimer);
 #else
 void
 BlinkTimerCallback(
