@@ -21,7 +21,7 @@ EXTRA_CFLAGS += -D$(OPTION_WPC)
 #EXTRA_CFLAGS += -D$(OPTION_DEBFS)
 
 all:
-	$(MAKE) -C $(KSRC) M=$(KMOD_SRC) $(KMOD_OPTIONS) $(MAKECMDGOALS) EXTRA_CFLAGS="$(EXTRA_CFLAGS) -w"
+	$(MAKE) -C $(KSRC) M=$(KMOD_SRC) $(KMOD_OPTIONS) $(MAKECMDGOALS) EXTRA_CFLAGS="$(EXTRA_CFLAGS) -Wno-incompatible-pointer-types"
 
 .PHONY: all load unload reload clean
 

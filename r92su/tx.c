@@ -425,10 +425,10 @@ r92su_tx_add_80211(struct r92su *r92su, struct sk_buff *skb,
 	bool qos;
 
 	qos = tx_info->sta->qos_sta;
-/*	if (bss_priv->control_port_ethertype == skb->protocol)
+	if (bss_priv->control_port_ethertype == skb->protocol)
 		qos = false;
-
-	err = ieee80211_data_from_8023(skb, wdev_address(wdev), wdev->iftype,
+        err = 0;
+/*	err = ieee80211_data_from_8023(skb, wdev_address(wdev), wdev->iftype,
 				       bss_priv->fw_bss.bssid, qos);
 */
 	if (err)

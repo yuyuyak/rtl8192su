@@ -576,10 +576,10 @@ r92su_rx_data_to_8023(struct r92su *r92su, struct sk_buff *skb,
 		struct r92su_rx_info tmp_rx_info = *r92su_get_rx_info(skb);
 		struct ethhdr ethhdr;
 
-		if (ieee80211_data_to_8023_exthdr(skb, &ethhdr,
+/*		if (ieee80211_data_to_8023_exthdr(skb, &ethhdr,
 		    wdev_address(&r92su->wdev), r92su->wdev.iftype, 0))
 			return RX_DROP;
-
+*/
 		ieee80211_amsdu_to_8023s(skb, queue,
 				       wdev_address(&r92su->wdev),
 				       r92su->wdev.iftype, 0, NULL, NULL);
