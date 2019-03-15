@@ -1,0 +1,4 @@
+make -C /lib/modules/4.20.2/build M=/home/sputnik/.git/rtl8192su/r92su CONFIG_R92SU=m CONFIG_R92SU_WPC=y  EXTRA_CFLAGS="-DDEBUG -DCONFIG_R92SU=m -DCONFIG_R92SU_WPC=y"
+make[1]: Entering directory '/usr/src/linux-4.20.2'
+  CC [M]  /home/sputnik/.git/rtl8192su/r92su/main.o
+make[1]: Leaving directory '/usr/src/linux-4.20.2'

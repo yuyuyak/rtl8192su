@@ -31,7 +31,7 @@
 #include <linux/kernel.h>
 #include <linux/etherdevice.h>
 
-#include <net/ieee80211_radiotap.h>
+#include <net/ieee80211_radiotap.h>*/
 #include <asm/unaligned.h>
 
 #include "r92su.h"
@@ -563,6 +563,7 @@ r92su_rx_data_to_8023(struct r92su *r92su, struct sk_buff *skb,
 		      struct r92su_bss_priv *bss_priv, struct sk_buff **_skb,
 		      struct sk_buff_head *queue)
 {
+
 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *) skb->data;
 	bool is_amsdu = false;
 
@@ -576,7 +577,7 @@ r92su_rx_data_to_8023(struct r92su *r92su, struct sk_buff *skb,
 		struct ethhdr ethhdr;
 
 		if (ieee80211_data_to_8023_exthdr(skb, &ethhdr,
-		    wdev_address(&r92su->wdev), r92su->wdev.iftype))
+		    wdev_address(&r92su->wdev), r92su->wdev.iftype, 0))
 			return RX_DROP;
 
 		ieee80211_amsdu_to_8023s(skb, queue,
@@ -1100,7 +1101,11 @@ void r92su_reorder_tid_timer(unsigned long arg)
 	__skb_queue_head_init(&frames);
 
 	rcu_read_lock();
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
+	tid = (struct r92su_rx_tid *) from_timer(tid, t, reorder_timer);
+#else    
 	tid = (struct r92su_rx_tid *) arg;
+#endif
 	r92su = tid->r92su;
 	sta = tid->sta;
 

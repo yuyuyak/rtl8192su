@@ -43,7 +43,7 @@ u8 *r92su_find_ie(u8 *ies, const u32 len, const u8 ie);
 
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
-void r92su_reorder_tid_timer(struct timer_list *t)
+void r92su_reorder_tid_timer(struct timer_list *t);
 #else
 void r92su_reorder_tid_timer(unsigned long arg);
 #endif
